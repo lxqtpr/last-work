@@ -526,7 +526,6 @@ class CutShapeGame {
         );
 
         modal.classList.add('show');
-        this.playSound('gameOver');
     }
 
     restartGame() {
