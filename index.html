@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Разрежь фигуру - Заставка</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="intro-page">
+    <div class="container">
+        <div class="intro-content">
+            <h1 class="game-title animated-title">✂️ Разрежь фигуру</h1>
+            <p class="game-description">Разрежь многоугольники на равные части!</p>
+
+            <div class="auth-form">
+                <h2>Введите ваше имя</h2>
+                <input type="text" id="playerName" placeholder="Ваше имя" maxlength="20" autocomplete="off">
+                <div class="error-message" id="nameError"></div>
+
+                <div class="level-selection">
+                    <h3>Выберите уровень сложности:</h3>
+                    <div class="level-buttons">
+                        <button class="level-btn" data-level="easy">
+                            <span class="level-icon">😊</span>
+                            <span>Легкий</span>
+                            <small>3 уровня, 90 сек</small>
+                        </button>
+                        <button class="level-btn" data-level="medium">
+                            <span class="level-icon">😐</span>
+                            <span>Средний</span>
+                            <small>4 уровня, 75 сек</small>
+                            <small>Фигура двигается!</small>
+                        </button>
+                        <button class="level-btn" data-level="hard">
+                            <span class="level-icon">😤</span>
+                            <span>Сложный</span>
+                            <small>5 уровней, 60 сек</small>
+                            <small>Фигура вращается!</small>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="startGame" class="btn-primary" disabled>Начать игру</button>
+                <button id="viewRating" class="btn-secondary">Таблица рекордов</button>
+            </div>
+
+            <div class="game-rules">
+                <h3>Как играть:</h3>
+                <ul>
+                    <li>🖱️ Кликайте на фигуру чтобы начать разрез</li>
+                    <li>✂️ Проводите линии разрезов через фигуру</li>
+                    <li>⚖️ Разделите фигуру на равные по площади части</li>
+                    <li>⏱️ Успейте выполнить задание за отведенное время</li>
+                    <li>🎯 Чем точнее разрез - тем больше баллов!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/intro.js"></script>
+</body>
+</html>
+

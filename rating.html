@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Разрежь фигуру - Рейтинг</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="rating-page">
+    <div class="container">
+        <div class="rating-content">
+            <h1 class="page-title">🏆 Таблица рекордов</h1>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="easy">Легкий</button>
+                <button class="filter-btn" data-filter="medium">Средний</button>
+                <button class="filter-btn" data-filter="hard">Сложный</button>
+            </div>
+
+            <div class="rating-table-container">
+                <table class="rating-table">
+                    <thead>
+                        <tr>
+                            <th>Место</th>
+                            <th>Игрок</th>
+                            <th>Очки</th>
+                            <th>Уровень</th>
+                            <th>Сложность</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ratingTableBody">
+                    </tbody>
+                </table>
+                <div id="noResults" class="no-results" style="display: none;">
+                    <p>😔 Результатов пока нет</p>
+                    <p>Будьте первым!</p>
+                </div>
+            </div>
+
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <h3>Всего игр</h3>
+                    <p class="stat-number" id="totalGames">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Лучший результат</h3>
+                    <p class="stat-number" id="bestScore">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Всего игроков</h3>
+                    <p class="stat-number" id="totalPlayers">0</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="clearRating" class="btn-danger">🗑️ Очистить рейтинг</button>
+                <button id="backToMenu" class="btn-primary">🏠 Главное меню</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/rating.js"></script>
+</body>
+</html>

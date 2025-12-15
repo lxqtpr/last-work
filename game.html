@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Разрежь фигуру - Игра</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="game-page">
+    <div class="game-header">
+        <div class="player-info">
+            <span class="player-name">👤 <span id="currentPlayer"></span></span>
+            <span class="difficulty">📊 Уровень: <span id="currentDifficulty"></span></span>
+        </div>
+        <div class="game-stats">
+            <div class="stat-item">
+                <span class="stat-label">⏱️ Время:</span>
+                <span class="stat-value timer" id="timer">60</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">🎯 Очки:</span>
+                <span class="stat-value score" id="score">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">📍 Уровень:</span>
+                <span class="stat-value" id="currentLevel">1</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">❤️ Жизни:</span>
+                <span class="stat-value lives" id="lives">3</span>
+            </div>
+            <button id="goToMenu" class="btn-menu-small">🏠 Меню</button>
+        </div>
+
+    </div>
+
+    <div class="game-container">
+        <div class="task-panel">
+            <h2>Задание:</h2>
+            <div id="taskDescription" class="task-text"></div>
+            <div class="controls">
+                <button id="clearCuts" class="btn-small">🗑️ Очистить разрезы</button>
+                <button id="submitCuts" class="btn-primary-small" disabled>✅ Проверить</button>
+                <button id="skipLevel" class="btn-warning-small">⏭️ Пропустить (-50 очков)</button>
+            </div>
+            <div class="cuts-info">
+                <p>Разрезов сделано: <span id="cutsCount">0</span> / <span id="cutsRequired">0</span></p>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="gameCanvas" width="800" height="800"></canvas>
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <div class="help-panel">
+            <h3>Управление:</h3>
+            <ul>
+                <li><kbd>ЛКМ</kbd> - Начать/закончить разрез</li>
+                <li><kbd>ПКМ</kbd> - Отменить текущий разрез</li>
+                <li><kbd>Пробел</kbd> - Очистить все разрезы</li>
+                <li><kbd>Enter</kbd> - Проверить ответ</li>
+                <li><kbd>Esc</kbd> - Выход в меню</li>
+            </ul>
+            <div class="hint-box">
+                <h4>💡 Подсказка:</h4>
+                <p id="hintText">Начните с разделения фигуры пополам</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="levelCompleteModal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 Уровень завершен!</h2>
+            <p class="modal-score">Заработано: <span id="levelScore">0</span> очков</p>
+            <button id="nextLevel" class="btn-primary">Следующий уровень →</button>
+        </div>
+    </div>
+
+    <div id="gameOverModal" class="modal">
+        <div class="modal-content">
+            <h2 id="gameOverTitle">Игра окончена!</h2>
+            <p class="modal-final-score">Итоговый счет: <span id="finalScore">0</span></p>
+            <p class="modal-message" id="gameOverMessage"></p>
+            <div class="modal-buttons">
+                <button id="restartGame" class="btn-primary">🔄 Новая игра</button>
+                <button id="viewResults" class="btn-secondary">🏆 Рейтинг</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="nextLevelPopup" class="modal">
+        <div class="modal-content">
+            <h2>Следующий уровень</h2>
+            <p>Готов продолжить?</p>
+
+            <div class="modal-buttons">
+                <button id="continueNextPopup" class="btn-primary">Да</button>
+                <button id="cancelNext" class="btn-secondary">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/geometry.js"></script>
+    <script src="js/game.js"></script>
+</body>
+
+</html>
