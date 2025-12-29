@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewRatingBtn = document.getElementById('viewRating');
     const levelButtons = document.querySelectorAll('.level-btn');
     
-    let selectedDifficulty = null;
+    let selectedDifficulty = GameStorage.getDifficulty() || 'easy';
 
     const savedName = GameStorage.getPlayerName();
     if (savedName) {
@@ -13,29 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
         validateName();
     }
 
-    const savedDifficulty = GameStorage.getDifficulty();
-    if (savedDifficulty) {
-        selectDifficulty(savedDifficulty);
-    }
+    selectDifficulty(selectedDifficulty);
+
+    playerNameInput.addEventListener('input', updateStartButton);
 
     function validateName() {
         const name = playerNameInput.value.trim();
 
         if (name.length < 2) {
             nameError.textContent = 'Имя должно содержать минимум 2 символа';
-            startGameBtn.disabled = true;
             return false;
         }
 
         if (name.length > 20) {
             nameError.textContent = 'Имя не должно превышать 20 символов';
-            startGameBtn.disabled = true;
             return false;
         }
 
         nameError.textContent = '';
-        startGameBtn.disabled = !selectedDifficulty;
         return true;
+    }
+
+    function updateStartButton() {
+        const ok = validateName() && !!selectedDifficulty;
+        startGameBtn.disabled = !ok;
+        return ok;
     }
 
     function selectDifficulty(difficulty) {
@@ -49,10 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        startGameBtn.disabled = !validateName();
+        updateStartButton();
     }
 
-    playerNameInput.addEventListener('input', validateName);
     playerNameInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !startGameBtn.disabled) {
             startGame();
@@ -91,14 +92,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         }
     }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === '1') selectDifficulty('easy');
-        if (e.key === '2') selectDifficulty('medium');
-        if (e.key === '3') selectDifficulty('hard');
-        if (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К') {
-            window.location.href = 'rating.html';
-        }
-    });
 });
-
