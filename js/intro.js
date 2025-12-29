@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
         startGameBtn.disabled = !validateName();
     }
 
-    playerNameInput.addEventListener('input', validateName);
     playerNameInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !startGameBtn.disabled) {
             startGame();
@@ -91,14 +90,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         }
     }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === '1') selectDifficulty('easy');
-        if (e.key === '2') selectDifficulty('medium');
-        if (e.key === '3') selectDifficulty('hard');
-        if (e.key === 'r' || e.key === 'R' || e.key === 'к' || e.key === 'К') {
-            window.location.href = 'rating.html';
-        }
-    });
 });
 
