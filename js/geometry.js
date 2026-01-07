@@ -248,7 +248,7 @@ const Geometry = {
             Math.abs(area - avgArea) / avgArea
         ));
 
-        return Math.max(0, 1 - maxDeviation / 0.4);
+        return Math.max(0, 1 - maxDeviation);
     }
 };
 
