@@ -85,7 +85,7 @@ class CutShapeGame {
             e.preventDefault();
             this.clearCuts();
         });
-        
+
         document.getElementById('goToMenu').addEventListener('click', () => {
             window.location.href = 'index.html';
         });
@@ -95,38 +95,41 @@ class CutShapeGame {
         document.getElementById('skipLevel').addEventListener('click', () => this.skipLevel());
 
         document.getElementById('nextLevel').addEventListener('click', () => this.nextLevel());
+        document.getElementById('menuFromLevel').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
         document.getElementById('restartGame').addEventListener('click', () => this.restartGame());
         document.getElementById('viewResults').addEventListener('click', () => {
             window.location.href = 'rating.html';
         });
-        
+
 
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
     }
-    
+
     getTransformMatrix() {
-        let center = new DOMPoint(this.canvas.width/2,this.canvas.height/2);
+        let center = new DOMPoint(this.canvas.width / 2, this.canvas.height / 2);
 
         return (new DOMMatrix())
-            .translate(center.x,center.y)
-            .rotate( (1-this.endTransition) * Math.sin(this.time*0.0021) * this.settings.RotationIntensity)
-            .translate( (1-this.endTransition) * Math.sin(this.time*0.002) * this.settings.MoveXIntensity,
-                        (1-this.endTransition) * Math.cos(this.time*0.002) * this.settings.MoveYIntensity)
-            .translate(-center.x,-center.y);
+            .translate(center.x, center.y)
+            .rotate((1 - this.endTransition) * Math.sin(this.time * 0.0021) * this.settings.RotationIntensity)
+            .translate((1 - this.endTransition) * Math.sin(this.time * 0.002) * this.settings.MoveXIntensity,
+                (1 - this.endTransition) * Math.cos(this.time * 0.002) * this.settings.MoveYIntensity)
+            .translate(-center.x, -center.y);
     }
 
     transformPoint(point) {
-        const rect = this.canvas.getBoundingClientRect(); 
+        const rect = this.canvas.getBoundingClientRect();
 
         const matrix = this.getTransformMatrix().inverse();
-        let pointPX = 
+        let pointPX =
             new DOMPoint(
-                (point.x - (rect.left) ) , 
-                (point.y - (rect.top ) ) 
+                (point.x - (rect.left)),
+                (point.y - (rect.top))
             )
-        const x = (pointPX.x)/this.canvas.clientWidth * this.canvas.width ;
-        const y = (pointPX.y)/this.canvas.clientHeight * this.canvas.height ;
-        pointPX = new DOMPoint(x,y)
+        const x = (pointPX.x) / this.canvas.clientWidth * this.canvas.width;
+        const y = (pointPX.y) / this.canvas.clientHeight * this.canvas.height;
+        pointPX = new DOMPoint(x, y)
         pointPX = matrix.transformPoint(pointPX);
 
         return pointPX;
@@ -134,13 +137,13 @@ class CutShapeGame {
 
     handleClick(e) {
         if (this.isGameOver || this.isPaused) return;
-        if(this.isAnswered) {
+        if (this.isAnswered) {
             return;
         }
         const point = this.transformPoint({x: e.clientX, y: e.clientY});
 
         if (!this.currentCut) {
-            this.currentCut = { start: point, end: {x: e.clientX, y: e.clientY} };
+            this.currentCut = {start: point, end: {x: e.clientX, y: e.clientY}};
         } else {
             this.currentCut.end = point;
 
@@ -165,9 +168,9 @@ class CutShapeGame {
     }
 
     handleKeyPress(e) {
-        if (this.isGameOver || this.isAnswered ) return;
+        if (this.isGameOver || this.isAnswered) return;
 
-        switch(e.key) {
+        switch (e.key) {
             case ' ':
                 e.preventDefault();
                 this.clearCuts();
@@ -236,7 +239,7 @@ class CutShapeGame {
     }
 
     addCut(cut) {
-        if(this.isAnswered) {
+        if (this.isAnswered) {
             return;
         }
         if (this.cuts.length >= this.settings.cutsRequired) {
@@ -247,15 +250,14 @@ class CutShapeGame {
     }
 
     clearCuts() {
-        if(this.isAnswered) {
+        if (this.isAnswered) {
             return;
         }
-        
+
         this.cuts = [];
         this.currentCut = null;
         this.polygonParts = [];
         this.updateCutsCount();
-        this.playSound('clear');
     }
 
     cancelCurrentCut() {
@@ -267,12 +269,11 @@ class CutShapeGame {
     updateCutsCount() {
         document.getElementById('cutsCount').textContent = this.cuts.length;
         const submitBtn = document.getElementById('submitCuts');
-        // Кнопка активна только когда есть хотя бы один разрез
         submitBtn.disabled = this.cuts.length === 0;
     }
 
     checkAnswer() {
-        if(this.isAnswered) {
+        if (this.isAnswered) {
             return;
         }
         if (this.cuts.length === 0) {
@@ -287,13 +288,16 @@ class CutShapeGame {
             this.clearCuts();
             return;
         }
-        
+
         if (polygonParts.length !== this.partsCount) {
             this.showFeedback(`Необходимо получить ${this.partsCount} ${this.getPluralWord(this.partsCount, 'часть', 'части', 'частей')}!`, 'error');
             this.lives -= 1;
             this.updateUI();
-            this.playSound('error');
-            if(this.lives === 0){
+            this.cuts = [];
+            this.currentCut = null;
+            this.polygonParts = [];
+            this.updateCutsCount();
+            if (this.lives === 0) {
                 this.gameOver(false);
                 return;
             }
@@ -332,12 +336,10 @@ class CutShapeGame {
             `${quality} Точность: ${Math.round(accuracy * 100)}% | Разрезов: ${this.cuts.length} | +${totalScore} очков`,
             'success'
         );
-        this.playSound('success');
 
         this.endTransition = 0.001;
         this.isAnswered = true;
-        
-        // Автоматически переходим к следующему вопросу через 2 секунды
+
         setTimeout(() => {
             if (this.currentQuestion < this.settings.questionsPerLevel) {
                 this.currentQuestion++;
@@ -346,7 +348,7 @@ class CutShapeGame {
             } else {
                 this.completeLevel();
             }
-        }, 3000);
+        }, 1500);
     }
 
     splitPolygonWithCuts() {
@@ -372,13 +374,12 @@ class CutShapeGame {
     }
 
     skipLevel() {
-        if(this.isAnswered){
+        if (this.isAnswered) {
             return
         }
         if (confirm('Пропустить уровень? Вы потеряете 50 очков.')) {
             this.score = Math.max(0, this.score - 50);
 
-            // Не теряем жизнь при пропуске
             if (!this.isGameOver) {
                 if (this.currentQuestion < this.settings.questionsPerLevel) {
                     this.currentQuestion++;
@@ -392,17 +393,10 @@ class CutShapeGame {
         }
     }
 
-    showSolution() {
-        // Заменяем на простую подсказку вместо автоматического решения
-        this.showHint();
-    }
-
     showHint() {
-        // Показываем полезную подсказку игроку
         const partsCount = this.settings.cutsRequired + 1;
         const center = Geometry.getCentroid(this.polygon);
 
-        // Рисуем линии-подсказки (полупрозрачные)
         this.ctx.save();
         this.ctx.globalAlpha = 0.3;
         this.ctx.strokeStyle = '#3498db';
@@ -410,15 +404,13 @@ class CutShapeGame {
         this.ctx.setLineDash([10, 10]);
 
         if (partsCount === 3) {
-            // Для 3 частей - показываем 2 направления разрезов
             const hints = [
-                { angle: Math.PI / 6, text: 'Попробуйте 2 разреза под углом ~60°' },
-                { angle: Math.PI / 3, text: 'Или разрежьте вертикально и горизонтально' }
+                {angle: Math.PI / 6, text: 'Попробуйте 2 разреза под углом ~60°'},
+                {angle: Math.PI / 3, text: 'Или разрежьте вертикально и горизонтально'}
             ];
 
             const hint = hints[Math.floor(Math.random() * hints.length)];
 
-            // Рисуем подсказочные линии
             for (let i = 0; i < 2; i++) {
                 const angle = hint.angle * (i + 0.5);
                 this.ctx.beginPath();
@@ -429,7 +421,6 @@ class CutShapeGame {
 
             this.showFeedback(hint.text, 'success');
         } else {
-            // Для 4+ частей - показываем радиальные направления
             const angleStep = (Math.PI * 2) / partsCount;
 
             for (let i = 0; i < this.settings.cutsRequired; i++) {
@@ -451,7 +442,6 @@ class CutShapeGame {
 
         this.ctx.restore();
 
-        // Обновляем текстовую подсказку
         const hintTexts = {
             2: 'Для 3 частей: попробуйте разрезы под углом 60° друг к другу',
             3: 'Для 4 частей: разрежьте через центр крест-накрест',
@@ -461,10 +451,8 @@ class CutShapeGame {
         document.getElementById('hintText').textContent =
             hintTexts[this.settings.cutsRequired] || 'Разрезайте фигуру через центр равномерно';
 
-        // Небольшой штраф за подсказку
         this.score = Math.max(0, this.score - 10);
         this.updateUI();
-        this.playSound('success');
     }
 
     completeLevel() {
@@ -473,16 +461,16 @@ class CutShapeGame {
 
         modal.classList.add('show');
         this.isPaused = true;
-        this.playSound('levelComplete');
     }
+
     getPluralWord(n, One, Two, Five) {
         n = Math.abs(n) % 100;
         const last = n % 10;
 
-        if (n > 10 && n < 20) return Five;       // 11–19
-        if (last === 1) return One;             // 1, 21, 31...
-        if (last >= 2 && last <= 4) return Two; // 2–4, 22–24...
-        return Five;                            // 5–9, 0
+        if (n > 10 && n < 20) return Five;
+        if (last === 1) return One;
+        if (last >= 2 && last <= 4) return Two;
+        return Five;
     }
 
     nextLevel() {
@@ -571,7 +559,7 @@ class CutShapeGame {
     }
 
     render(delta = 0) {
-        if(this.endTransition > 0)
+        if (this.endTransition > 0)
             this.endTransition = Math.min(1, this.endTransition + (delta - this.time) * 0.004)
 
         this.time = delta
@@ -598,7 +586,9 @@ class CutShapeGame {
         this.ctx.arc(center.x, center.y, 5, 0, Math.PI * 2);
         this.ctx.fill();
 
-        requestAnimationFrame((delta) => {this.render(delta)});
+        requestAnimationFrame((delta) => {
+            this.render(delta)
+        });
     }
 
     drawPolygon(points, fillColor = 'rgba(102, 126, 234, 0.2)', strokeColor = '#667eea') {
@@ -637,7 +627,7 @@ class CutShapeGame {
         ];
 
         this.polygonParts.forEach((part, index) => {
-            this.drawPolygon(part, colors[index % colors.length], '#ff0000');
+            this.drawPolygon(part, colors[index % colors.length], '#000000');
 
             const center = Geometry.getCentroid(part);
             const area = Math.round(Geometry.calculateArea(part));
@@ -700,47 +690,10 @@ class CutShapeGame {
 
         setTimeout(() => {
             feedback.classList.remove('show');
-        }, 2000);
-    }
-
-    playSound(type) {
-        // Простая звуковая обратная связь через Web Audio API
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        switch(type) {
-            case 'click':
-                oscillator.frequency.value = 400;
-                gainNode.gain.value = 0.1;
-                break;
-            case 'cut':
-                oscillator.frequency.value = 600;
-                gainNode.gain.value = 0.15;
-                break;
-            case 'success':
-                oscillator.frequency.value = 800;
-                gainNode.gain.value = 0.2;
-                break;
-            case 'error':
-                oscillator.frequency.value = 200;
-                gainNode.gain.value = 0.2;
-                break;
-            case 'clear':
-                oscillator.frequency.value = 300;
-                gainNode.gain.value = 0.1;
-                break;
-        }
-
-        oscillator.start();
-        oscillator.stop(audioContext.currentTime + 0.1);
+        }, 1500);
     }
 }
 
-// Запуск игры при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    const game = new CutShapeGame();
+    new CutShapeGame();
 });

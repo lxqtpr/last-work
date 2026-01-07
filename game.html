@@ -11,7 +11,7 @@
 <body class="game-page">
     <div class="game-header">
         <div class="player-info">
-            <span class="player-name">👤 <span id="currentPlayer"></span></span>
+            <a href="index.html" class="player-name" style="text-decoration: none; cursor: pointer;">👤 <span id="currentPlayer"></span></a>
             <span class="difficulty">📊 Уровень: <span id="currentDifficulty"></span></span>
         </div>
         <div class="game-stats">
@@ -75,7 +75,10 @@
         <div class="modal-content">
             <h2>🎉 Уровень завершен!</h2>
             <p class="modal-score">Заработано: <span id="levelScore">0</span> очков</p>
-            <button id="nextLevel" class="btn-primary">Следующий уровень →</button>
+            <div class="modal-buttons">
+                <button id="nextLevel" class="btn-primary">🔄 Новая игра</button>
+                <button id="menuFromLevel" class="btn-secondary">🏠 В меню</button>
+            </div>
         </div>
     </div>
 
